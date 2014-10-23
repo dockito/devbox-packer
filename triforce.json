@@ -1,0 +1,37 @@
+{
+  "variables": {
+    "ssh_name": "vagrant",
+    "ssh_pass": "vagrant",
+    "hostname": "triforce"
+  },
+  "builders": [
+  {
+    "type": "vmware-iso",
+    "iso_url": "http://stable.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso",
+    "iso_checksum": "c11035a4ed4b0727a72c4b92a4fa6807",
+    "iso_checksum_type": "md5",
+    "ssh_username": "{{user `ssh_name`}}",
+    "ssh_password": "{{user `ssh_pass`}}",
+    "ssh_port": "22",
+    "ssh_wait_timeout": "20m",
+    "http_directory" : "provision",
+    "shutdown_command": "echo {{user `ssh_pass`}} | sudo -S shutdown -P now",
+    "boot_wait": "20s",
+    "boot_command": [
+      "sudo iptables -A INPUT -p tcp --dport 22 -j DROP <enter>",
+      "curl -k http://{{ .HTTPIP }}:{{ .HTTPPort }}/cloud-config.yaml > cloud-config.yaml  <enter>",
+      "cat cloud-config.yaml <enter>",
+      "sudo coreos-install -d /dev/sda -c cloud-config.yaml <enter>",
+      "sudo reboot <enter>"
+    ]
+  }
+  ],
+  "provisioners": [{
+    "type": "shell",
+    "inline": [
+      "sudo mkdir -p /opt/bin",
+      "sudo curl -o /opt/bin/fig -L https://github.com/docker/fig/releases/download/1.0.0/fig-`uname -s`-`uname -m`",
+      "sudo chmod +x /opt/bin/fig"
+    ]
+  }]
+}
