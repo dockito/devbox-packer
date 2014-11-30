@@ -2,7 +2,7 @@
 
 Image builder for the ultimate development box.
 
-Docker + Fig + Hipache.
+Docker + Fig + Nginx.
 
 ## Build
 

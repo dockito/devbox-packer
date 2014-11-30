@@ -22,3 +22,24 @@ coreos:
       command: start
     - name: fleet.service
       command: start
+    - name: proxy.service
+      command: start
+      content: |
+        [Unit]
+        Description=Run proxy
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        User=core
+        Restart=always
+        RestartSec=10s
+        ExecStartPre=/usr/bin/docker pull dockito/proxy:latest
+        ExecStartPre=/usr/bin/docker ps -a -q | xargs docker rm
+        ExecStart=/usr/bin/docker run --privileged=true -rm -name proxy -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 dockito/proxy:latest
+        ExecStartPost=/usr/bin/docker ps -a -q | xargs docker rm
+        ExecStop=/usr/bin/docker kill proxy
+        ExecStopPost=/usr/bin/docker ps -a -q | xargs docker rm
+
+        [Install]
+        WantedBy=local.target
