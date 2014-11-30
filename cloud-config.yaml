@@ -43,3 +43,14 @@ coreos:
 
         [Install]
         WantedBy=local.target
+    - name: update-fig.service
+      command: start
+      content: |
+        [Unit]
+        Description=Installs or updates fig.sh
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=mkdir -p /opt/bin
+        ExecStart=curl -o /opt/bin/fig -L https://github.com/docker/fig/releases/download/1.0.0/fig-`uname -s`-`uname -m`
+        ExecStart=chmod +x /opt/bin/fig
