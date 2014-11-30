@@ -2,7 +2,7 @@
   "variables": {
     "ssh_name": "vagrant",
     "ssh_pass": "vagrant",
-    "hostname": "triforce"
+    "hostname": "devbox"
   },
   "builders": [
   {
@@ -38,7 +38,7 @@
     [
       {
         "type": "vagrant",
-        "output": "triforce_{{.Provider}}.box"
+        "output": "devbox_{{.Provider}}.box"
       }
     ]
   ]

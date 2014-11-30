@@ -1,4 +1,4 @@
-# Triforce
+# Dockito development box
 
 Image builder for the ultimate development box.
 
@@ -9,5 +9,5 @@ Docker + Fig + Hipache.
 You will need Packer.io installed and VMWare Fusion.
 
 ```bash
-packer build triforce.json
+packer build devbox.json
 ```
