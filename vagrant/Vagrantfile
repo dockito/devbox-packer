@@ -4,6 +4,11 @@
 require_relative 'configure_networks.rb'
 
 Vagrant.configure("2") do |config|
+  VM_MEMORY = "1512"
+  VM_IP = "10.10.10.10"
+
+  config.vm.network :private_network, ip: VM_IP, netmask: "255.255.255.0"
+
   # Disable the base shared folder, guest additions are unavailable.
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -15,9 +20,13 @@ Vagrant.configure("2") do |config|
     # Fix docker not being able to resolve private registry in VirtualBox
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+
+    vb.customize ["modifyvm", :id, "--memory", VM_MEMORY]
   end
 
   config.vm.provider :vmware_fusion do |vf|
     vf.functional_hgfs = false
+    vf.vmx["memsize"] = VM_MEMORY
+    vf.vmx["numvcpus"] = "2"
   end
 end
