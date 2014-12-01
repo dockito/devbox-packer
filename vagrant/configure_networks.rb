@@ -1,6 +1,6 @@
 require "tempfile"
 
-require "vagrant/util/template_renderer"
+require Vagrant.source_root.join("plugins/guests/coreos/cap/configure_networks.rb")
 
 module VagrantPlugins
   module GuestCoreOS
