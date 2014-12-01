@@ -21,7 +21,7 @@
     "boot_command": [
       "sudo iptables -A INPUT -p tcp --dport 22 -j DROP <enter>",
       "curl -k http://{{ .HTTPIP }}:{{ .HTTPPort }}/cloud-config.yaml > cloud-config.yaml  <enter>",
-      "sudo coreos-install -d /dev/sda -c cloud-config.yaml <enter>",
+      "sudo coreos-install -d /dev/sda -C beta -c cloud-config.yaml <enter>",
       "sudo reboot <enter>"
     ]
   }
