@@ -17,7 +17,7 @@
     "http_directory" : ".",
     "shutdown_command": "echo {{user `ssh_pass`}} | sudo -S shutdown -P now",
     "guest_os_type": "linux",
-    "boot_wait": "20s",
+    "boot_wait": "40s",
     "boot_command": [
       "sudo iptables -A INPUT -p tcp --dport 22 -j DROP <enter>",
       "curl -k http://{{ .HTTPIP }}:{{ .HTTPPort }}/cloud-config.yaml > cloud-config.yaml  <enter>",
