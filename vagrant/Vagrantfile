@@ -1,0 +1,23 @@
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+
+require_relative 'configure_networks.rb'
+
+Vagrant.configure("2") do |config|
+  # Disable the base shared folder, guest additions are unavailable.
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  config.vm.provider :virtualbox do |vb|
+    # Guest Additions are unavailable.
+    vb.check_guest_additions = false
+    vb.functional_vboxsf = false
+
+    # Fix docker not being able to resolve private registry in VirtualBox
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+  end
+
+  config.vm.provider :vmware_fusion do |vf|
+    vf.functional_hgfs = false
+  end
+end

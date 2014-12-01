@@ -30,7 +30,9 @@
     [
       {
         "type": "vagrant",
-        "output": "devbox_{{.Provider}}.box"
+        "output": "devbox_{{.Provider}}.box",
+        "vagrantfile_template": "vagrant/Vagrantfile",
+        "include": ["vagrant/configure_networks.rb"]
       }
     ]
   ]
