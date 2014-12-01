@@ -29,6 +29,7 @@
   "provisioners": [{
     "type": "shell",
     "inline": [
+      "docker pull dockito/proxy:latest",
       "sudo mkdir -p /opt/bin",
       "sudo curl -o /opt/bin/fig -L https://github.com/docker/fig/releases/download/1.0.0/fig-`uname -s`-`uname -m`",
       "sudo chmod +x /opt/bin/fig",
