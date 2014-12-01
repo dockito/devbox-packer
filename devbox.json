@@ -31,7 +31,10 @@
     "inline": [
       "sudo mkdir -p /opt/bin",
       "sudo curl -o /opt/bin/fig -L https://github.com/docker/fig/releases/download/1.0.0/fig-`uname -s`-`uname -m`",
-      "sudo chmod +x /opt/bin/fig"
+      "sudo chmod +x /opt/bin/fig",
+      "sudo mkdir -p /etc/conf.d && sudo touch /etc/conf.d/nfs",
+      "sudo systemctl enable rpc-statd.service",
+      "sudo systemctl start rpc-statd.service"
     ]
   }],
   "post-processors": [
