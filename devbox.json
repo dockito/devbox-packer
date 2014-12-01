@@ -24,6 +24,26 @@
       "sudo coreos-install -d /dev/sda -C beta -c cloud-config.yaml <enter>",
       "sudo reboot <enter>"
     ]
+  },
+  {
+    "type": "virtualbox-iso",
+    "iso_url": "http://stable.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso",
+    "iso_checksum": "c11035a4ed4b0727a72c4b92a4fa6807",
+    "iso_checksum_type": "md5",
+    "ssh_username": "{{user `ssh_name`}}",
+    "ssh_password": "{{user `ssh_pass`}}",
+    "ssh_port": "22",
+    "ssh_wait_timeout": "20m",
+    "http_directory" : ".",
+    "shutdown_command": "echo {{user `ssh_pass`}} | sudo -S shutdown -P now",
+    "guest_os_type": "Linux_64",
+    "boot_wait": "40s",
+    "boot_command": [
+      "sudo iptables -A INPUT -p tcp --dport 22 -j DROP <enter>",
+      "curl -k http://{{ .HTTPIP }}:{{ .HTTPPort }}/cloud-config.yaml > cloud-config.yaml  <enter>",
+      "sudo coreos-install -d /dev/sda -C beta -c cloud-config.yaml <enter>",
+      "sudo reboot <enter>"
+    ]
   }
   ],
   "provisioners": [{
