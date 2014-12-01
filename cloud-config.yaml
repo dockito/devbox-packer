@@ -22,6 +22,7 @@ coreos:
       command: start
     - name: fleet.service
       command: start
+
     - name: proxy.service
       command: start
       content: |
@@ -29,7 +30,6 @@ coreos:
         Description=Run proxy
         After=docker.service
         Requires=docker.service
-
         [Service]
         User=core
         Restart=always
@@ -40,14 +40,14 @@ coreos:
         ExecStartPost=/usr/bin/docker ps -a -q | xargs docker rm
         ExecStop=/usr/bin/docker kill proxy
         ExecStopPost=/usr/bin/docker ps -a -q | xargs docker rm
-
         [Install]
         WantedBy=local.target
+
     - name: update-fig.service
       command: start
       content: |
         [Unit]
-        Description=Installs or updates fig.sh
+        Description=Installs or updates Fig
         [Service]
         Type=oneshot
         RemainAfterExit=yes
