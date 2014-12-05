@@ -39,7 +39,7 @@ coreos:
         Restart=always
         RestartSec=10s
         ExecStartPre=/usr/bin/docker pull dockito/proxy:latest
-        ExecStartPre=/usr/bin/docker ps -a -q | xargs docker rm
+        ExecStartPre=-/usr/bin/docker rm -f proxy
         ExecStart=/usr/bin/docker run --privileged=true -rm -name proxy -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 dockito/proxy:latest
         ExecStartPost=/usr/bin/docker ps -a -q | xargs docker rm
         ExecStop=/usr/bin/docker kill proxy
