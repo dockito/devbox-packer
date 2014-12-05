@@ -28,6 +28,7 @@ coreos:
 
     - name: proxy.service
       command: start
+      enable: true
       content: |
         [Unit]
         Description=Run proxy
