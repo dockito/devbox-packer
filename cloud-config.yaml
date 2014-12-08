@@ -85,12 +85,12 @@ coreos:
     - name: fleet.service
       command: start
 
-    - name: proxy.service
+    - name: dockito-proxy.service
       command: start
       enable: true
       content: |
         [Unit]
-        Description=Run proxy
+        Description=Run dockito-proxy
         After=docker.service
         Requires=docker.service
         [Service]
@@ -98,10 +98,10 @@ coreos:
         Restart=always
         RestartSec=10s
         ExecStartPre=/usr/bin/docker pull dockito/proxy:latest
-        ExecStartPre=-/usr/bin/docker rm -f proxy
-        ExecStart=/usr/bin/docker run --privileged=true -rm -name proxy -v /data/dockito-proxy/certs:/etc/nginx/certs -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 -p 443:443 dockito/proxy:latest
+        ExecStartPre=-/usr/bin/docker rm -f dockito-proxy
+        ExecStart=/usr/bin/docker run --privileged=true -rm -name dockito-proxy -v /data/dockito-proxy/certs:/etc/nginx/certs -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 -p 443:443 dockito/proxy:latest
         ExecStartPost=/usr/bin/docker ps -a -q | xargs docker rm
-        ExecStop=/usr/bin/docker kill proxy
+        ExecStop=/usr/bin/docker kill dockito-proxy
         ExecStopPost=/usr/bin/docker ps -a -q | xargs docker rm
         [Install]
         WantedBy=local.target
