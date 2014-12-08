@@ -5,6 +5,65 @@ hostname: devbox
 ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key
 
+write_files:
+  - path: /data/dockito-proxy/certs/local.dockito.org.crt
+    permissions: 0644
+    owner: root
+    content: |
+      -----BEGIN CERTIFICATE-----
+      MIIDHjCCAgYCCQDaRvwJn9ry2TANBgkqhkiG9w0BAQUFADBRMQswCQYDVQQGEwJC
+      UjEXMBUGA1UECBMOU2FudGEgQ2F0YXJpbmExFzAVBgNVBAcUDkZsb3JpYW7Ds3Bv
+      bGlzMRAwDgYDVQQKEwdEb2NraXRvMB4XDTE0MTIwODE1NDgwMFoXDTE1MTIwODE1
+      NDgwMFowUTELMAkGA1UEBhMCQlIxFzAVBgNVBAgTDlNhbnRhIENhdGFyaW5hMRcw
+      FQYDVQQHFA5GbG9yaWFuw7Nwb2xpczEQMA4GA1UEChMHRG9ja2l0bzCCASIwDQYJ
+      KoZIhvcNAQEBBQADggEPADCCAQoCggEBAM4aZEpSImpnrpQMr7nWy2jCFzNHZ/F/
+      pV1DgOWhW+Pwe0HRUtzTG+oQ6OONWjrz7lLViNOUuYOkNWf6HNWlylqPp0xtmDwJ
+      0Tmj7UB9vfSPqbtRvasAxgs47Zk9YOR5YswlrwbfMASXi/5E3s4rgz+rWRLk5Hqo
+      m36DQRwGiO+hoB41MqaPlfHnUFG0wsiFHXtSucYF6B1MCWl/9DHpeDQUe2SfaGHn
+      Sn/JHsmboh3ZHfIVxPTdY31OVu5Hz3UWAwKpOttRIeSa3yu6GkQlRKvkx12GCRug
+      /Yp1OO8Y6NuyvSdaiYtSqueyi7vDGFn7RSVy8NrHW2qmsUUJ4uIGlQUCAwEAATAN
+      BgkqhkiG9w0BAQUFAAOCAQEAo+T9zj0HqyzbQ8h+JMyIVN3jf++Uo3RPnjFFp0SE
+      dNfEBX8BX1v5/ePBPQgD25kprqmvUSFhwwNdkSvLauBbZbiWVd2GRoeAvOhV7lCg
+      dLuE/Aud8+27Eoo9ZSq7/eGxQOkpqyxvjkTGuXF0PHFBKnXM6tie/pOsVYwfUp5m
+      NVqN8ufV3T+Fb/61Nk+1KrMyUTf8S1KfsbMhSUbR7ZXB9AiuMbGsEh80OhvODi4s
+      c/JXrLo9orVW6co6aS+d1+xbztany4PgS+lyU7MTeysIkkFO0gA50UNJ2uOfaJlc
+      oWnlH22zfWKjp3jPla8wL+MwF/98l5jtuDpLvM/h9xLBbQ==
+      -----END CERTIFICATE-----
+
+
+  - path: /data/dockito-proxy/certs/local.dockito.org.key
+    permissions: 0644
+    owner: root
+    content: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEowIBAAKCAQEAzhpkSlIiameulAyvudbLaMIXM0dn8X+lXUOA5aFb4/B7QdFS
+      3NMb6hDo441aOvPuUtWI05S5g6Q1Z/oc1aXKWo+nTG2YPAnROaPtQH299I+pu1G9
+      qwDGCzjtmT1g5HlizCWvBt8wBJeL/kTeziuDP6tZEuTkeqibfoNBHAaI76GgHjUy
+      po+V8edQUbTCyIUde1K5xgXoHUwJaX/0Mel4NBR7ZJ9oYedKf8keyZuiHdkd8hXE
+      9N1jfU5W7kfPdRYDAqk621Eh5JrfK7oaRCVEq+THXYYJG6D9inU47xjo27K9J1qJ
+      i1Kq57KLu8MYWftFJXLw2sdbaqaxRQni4gaVBQIDAQABAoIBAE+rCftklmMVIvmd
+      kcu/SK983yT2RCqo0c4kSs34uqF4ktyVQneTryWiVbOoLym8ovIoEpTe13sYXYCM
+      wNqhFIA/KUc00fTbQqIKSKp2MJg5dD2xUiSozuUFo2ppvGt0tIj/RBHe8hvETNwD
+      2TBOx5Qz8uGH0v3K8RhNOjzQFdyypjtVL5h1Q73a7Fwp9te4HTHEivDpNk6H5PQK
+      n1nO0tgNkO6YVFTvpGpklxNkQcfgvE+5NmQAw1+m/SDlf+P0V7JvOrCaZOr36iNi
+      Gd+0MtjW0MWuL4CzR/iz6vPeZA2kPtpkUxo1gigpHLiTHYG3VB/SRZP/q5wzxw6U
+      ce9xk70CgYEA9uuGkFFlZvrwW3oMLSyYcgbh58pVZ9LptLyrKdyhP3RwhQgzi5XT
+      z9Oxomje900ovKXKSuuaauw3BNzWWVsoHJLe43GXolJb6wgU+Gvzp5dqygGxd1zV
+      5OFqBpfBic4sSuJfxsyz53V0GnXDErYqRtof5neHa/DJbjzGO8oKT6sCgYEA1a6e
+      4WoGEynectsXUbv9Rha8a/HDsGeq4fL/TL/ANOElVO+QOPISmLHsKMav3KnrYjFZ
+      Op9lWxcVwacwUGIj3dGsCLvryaFLZwZEKIGE4vfxOihqHgJj+V00MAd5kZmFtroh
+      LStT7ecCUQpW6Euol/STXhPuE1n6VRtzCB3hvg8CgYEAsfX6XBVuIhSGG0gRcpWL
+      odM4ChkYCOZILk00h81OIi/H0PmiPN5VdJo8krNGz7I6xAwximHYP2vUE5semfRL
+      KpzoK8D46rK1MOX4Rzt2trk47DLgNwkf2ABmrC2//ZQs9CPHp75tg0pxzYhGejv0
+      qHAZQb+wSKmYY+1Fal4ppFUCgYBdAVU8Dba5LpcY7M14kNdLY2f9n8wqAuU41VhT
+      on5ZRcnG70KZ1ptLhN2iXeB7riW6pnoM7wXhoOmiUU/RHPY5fSJg5tJY/3BfVjXi
+      X4VkeMCxLJgLmcTD69JkOUyrl+PARcFc9KfiO5MhjNuI3i1yfkyKPSh5mcdAteLa
+      nI799wKBgHoPS7uhjsZ/GAqak5o3DIXOdFV+hbQhcrQvV0qZVVYfoRxFEfY+lNeB
+      Px359ZhCMNT0zTtCYFM+fOdu92eT3lSMHL3ARtW71UG1XXBd9l751lkB2wUQxUmw
+      df3bQLz+Lrf10xuJVgcY/GdpWUAwuocU4dduB9LeSTuUHPUyOEh+
+      -----END RSA PRIVATE KEY-----
+
+
 users:
   - name: vagrant
     passwd: $6$rounds=4096$e/1eVLBLIyx4$rugS.gza5WFsEwxc9RQLa9mL0owrjJNpjG3bfYWBNTT55B8mPFagke.HX4YkS3oQSmD8/AyrcSD8XQMFcSf2P/
@@ -40,7 +99,7 @@ coreos:
         RestartSec=10s
         ExecStartPre=/usr/bin/docker pull dockito/proxy:latest
         ExecStartPre=-/usr/bin/docker rm -f proxy
-        ExecStart=/usr/bin/docker run --privileged=true -rm -name proxy -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 -p 443:443 dockito/proxy:latest
+        ExecStart=/usr/bin/docker run --privileged=true -rm -name proxy -v /data/dockito-proxy/certs:/etc/nginx/certs -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 -p 443:443 dockito/proxy:latest
         ExecStartPost=/usr/bin/docker ps -a -q | xargs docker rm
         ExecStop=/usr/bin/docker kill proxy
         ExecStopPost=/usr/bin/docker ps -a -q | xargs docker rm
