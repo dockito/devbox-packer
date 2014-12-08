@@ -99,7 +99,7 @@ coreos:
         RestartSec=10s
         ExecStartPre=/usr/bin/docker pull dockito/proxy:latest
         ExecStartPre=-/usr/bin/docker rm -f dockito-proxy
-        ExecStart=/usr/bin/docker run --privileged=true -rm -name dockito-proxy -v /data/dockito-proxy/certs:/etc/nginx/certs -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 -p 443:443 dockito/proxy:latest
+        ExecStart=/usr/bin/docker run --privileged=true --rm --name dockito-proxy -v /data/dockito-proxy/certs:/etc/nginx/certs -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 -p 443:443 dockito/proxy:latest
         ExecStartPost=/usr/bin/docker ps -a -q | xargs docker rm
         ExecStop=/usr/bin/docker kill dockito-proxy
         ExecStopPost=/usr/bin/docker ps -a -q | xargs docker rm
