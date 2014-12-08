@@ -8,7 +8,7 @@
   {
     "type": "vmware-iso",
     "iso_url": "http://stable.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso",
-    "iso_checksum": "c11035a4ed4b0727a72c4b92a4fa6807",
+    "iso_checksum": "cf295ccbcf8e96a303665d7b8ee9bdec",
     "iso_checksum_type": "md5",
     "ssh_username": "{{user `ssh_name`}}",
     "ssh_password": "{{user `ssh_pass`}}",
@@ -28,7 +28,7 @@
   {
     "type": "virtualbox-iso",
     "iso_url": "http://stable.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso",
-    "iso_checksum": "c11035a4ed4b0727a72c4b92a4fa6807",
+    "iso_checksum": "cf295ccbcf8e96a303665d7b8ee9bdec",
     "iso_checksum_type": "md5",
     "ssh_username": "{{user `ssh_name`}}",
     "ssh_password": "{{user `ssh_pass`}}",
