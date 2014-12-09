@@ -30,7 +30,6 @@ write_files:
       oWnlH22zfWKjp3jPla8wL+MwF/98l5jtuDpLvM/h9xLBbQ==
       -----END CERTIFICATE-----
 
-
   - path: /data/dockito-proxy/certs/local.dockito.org.key
     permissions: 0644
     owner: root
@@ -63,6 +62,12 @@ write_files:
       df3bQLz+Lrf10xuJVgcY/GdpWUAwuocU4dduB9LeSTuUHPUyOEh+
       -----END RSA PRIVATE KEY-----
 
+  - path: /etc/resolv.conf
+    permissions: 0644
+    owner: root
+    content: |
+      nameserver 127.0.0.1
+      nameserver 8.8.8.8
 
 users:
   - name: vagrant
@@ -102,6 +107,27 @@ coreos:
         ExecStart=/usr/bin/docker run --privileged=true --rm --name dockito-proxy -v /data/dockito-proxy/certs:/etc/nginx/certs -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 -p 443:443 dockito/proxy:latest
         ExecStartPost=/usr/bin/docker ps -a -q | xargs docker rm
         ExecStop=/usr/bin/docker kill dockito-proxy
+        ExecStopPost=/usr/bin/docker ps -a -q | xargs docker rm
+        [Install]
+        WantedBy=local.target
+
+    - name: dockito-dnsmasq.service
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Run dockito-dnsmasq
+        After=docker.service
+        Requires=docker.service
+        [Service]
+        User=core
+        Restart=always
+        RestartSec=10s
+        ExecStartPre=/usr/bin/docker pull dockito/dnsmasq:latest
+        ExecStartPre=-/usr/bin/docker rm -f dockito-dnsmasq
+        ExecStart=/usr/bin/docker run --rm -p 53:53/udp -p 53:53/tcp --name dockito-dnsmasq dockito/dnsmasq:latest
+        ExecStartPost=/usr/bin/docker ps -a -q | xargs docker rm
+        ExecStop=/usr/bin/docker kill dockito-dnsmasq
         ExecStopPost=/usr/bin/docker ps -a -q | xargs docker rm
         [Install]
         WantedBy=local.target
