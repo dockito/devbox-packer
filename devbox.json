@@ -56,7 +56,11 @@
       "sudo chmod +x /opt/bin/fig",
       "sudo mkdir -p /etc/conf.d && sudo touch /etc/conf.d/nfs",
       "sudo systemctl enable rpc-statd.service",
-      "sudo systemctl start rpc-statd.service"
+      "sudo systemctl start rpc-statd.service",
+      "sudo fallocate -l 2048m /2GiB.swap",
+      "sudo chmod 600 /2GiB.swap",
+      "sudo chattr +C /2GiB.swap",
+      "sudo mkswap /2GiB.swap"
     ]
   }],
   "post-processors": [

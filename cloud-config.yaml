@@ -131,3 +131,20 @@ coreos:
         ExecStopPost=/usr/bin/docker ps -a -q | xargs docker rm
         [Install]
         WantedBy=local.target
+
+    - name: swap.service
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Turn on swap
+        [Service]
+        Type=oneshot
+        Environment="SWAPFILE=/2GiB.swap"
+        RemainAfterExit=true
+        ExecStartPre=/usr/sbin/losetup -f ${SWAPFILE}
+        ExecStart=/usr/bin/sh -c "/sbin/swapon $(/usr/sbin/losetup -j ${SWAPFILE} | /usr/bin/cut -d : -f 1)"
+        ExecStop=/usr/bin/sh -c "/sbin/swapoff $(/usr/sbin/losetup -j ${SWAPFILE} | /usr/bin/cut -d : -f 1)"
+        ExecStopPost=/usr/bin/sh -c "/usr/sbin/losetup -d $(/usr/sbin/losetup -j ${SWAPFILE} | /usr/bin/cut -d : -f 1)"
+        [Install]
+        WantedBy=local.target
