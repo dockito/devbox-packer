@@ -2,7 +2,11 @@
 
 Image builder for the ultimate development box.
 
-Docker + Fig + Nginx.
+[Docker](http://docker.io/)(through [CoreOS](http://coreos.com/)) + [Fig](http://fig.sh/) + [Nginx](https://github.com/dockito/proxy).
+
+## Usage
+
+This is just an image, for more information on how to use this projet, check [dockito/devbox](https://github.com/dockito/devbox).
 
 ## Build
 
