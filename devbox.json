@@ -54,6 +54,8 @@
       "sudo mkdir -p /opt/bin",
       "sudo curl -o /opt/bin/fig -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m`",
       "sudo chmod +x /opt/bin/fig",
+      "sudo curl -o /opt/bin/docker-compose -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m`",
+      "sudo chmod +x /opt/bin/docker-compose",
       "sudo mkdir -p /etc/conf.d && sudo touch /etc/conf.d/nfs",
       "sudo systemctl enable rpc-statd.service",
       "sudo systemctl start rpc-statd.service",
