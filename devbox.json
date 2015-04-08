@@ -1,77 +1,60 @@
 {
   "variables": {
-    "ssh_name": "vagrant",
-    "ssh_pass": "vagrant",
+    "ssh_name": "rancher",
+    "ssh_pass": "rancher",
     "hostname": "devbox"
   },
   "builders": [
   {
     "type": "vmware-iso",
-    "iso_url": "http://stable.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso",
-    "iso_checksum": "b4c9d3ad20b399ff6d7f6a7da35d06b5",
+    "guest_os_type": "linux",
+    "iso_url": "https://github.com/rancherio/os/releases/download/v0.2.1/rancheros.iso",
+    "iso_checksum": "aad1763fcbc4a73c62434e76ea51eaaf",
     "iso_checksum_type": "md5",
     "ssh_username": "{{user `ssh_name`}}",
     "ssh_password": "{{user `ssh_pass`}}",
-    "ssh_port": "22",
-    "ssh_wait_timeout": "20m",
-    "http_directory" : ".",
-    "shutdown_command": "echo {{user `ssh_pass`}} | sudo -S shutdown -P now",
-    "guest_os_type": "linux",
-    "boot_wait": "40s",
-    "boot_command": [
-      "sudo iptables -A INPUT -p tcp --dport 22 -j DROP <enter>",
-      "curl -k http://{{ .HTTPIP }}:{{ .HTTPPort }}/cloud-config.yaml > cloud-config.yaml  <enter>",
-      "sudo coreos-install -d /dev/sda -C stable -c cloud-config.yaml <enter>",
-      "sudo reboot <enter>"
-    ]
+    "boot_wait":"4s",
+    "ssh_wait_timeout": "30s",
+    "vmx_data":{
+      "memsize":"1024",
+      "numvcpus":"1",
+      "cpuid.coresPerSocket":"2"
+    }
   },
   {
     "type": "virtualbox-iso",
-    "iso_url": "http://stable.release.core-os.net/amd64-usr/current/coreos_production_iso_image.iso",
-    "iso_checksum": "b4c9d3ad20b399ff6d7f6a7da35d06b5",
+    "guest_os_type": "Linux_64",
+    "iso_url": "https://github.com/rancherio/os/releases/download/v0.2.1/rancheros.iso",
+    "iso_checksum": "aad1763fcbc4a73c62434e76ea51eaaf",
     "iso_checksum_type": "md5",
     "ssh_username": "{{user `ssh_name`}}",
     "ssh_password": "{{user `ssh_pass`}}",
-    "ssh_port": "22",
-    "ssh_wait_timeout": "20m",
-    "http_directory" : ".",
-    "shutdown_command": "echo {{user `ssh_pass`}} | sudo -S shutdown -P now",
-    "guest_os_type": "Linux_64",
-    "boot_wait": "40s",
-    "guest_additions_mode": "disable",
-    "boot_command": [
-      "sudo iptables -A INPUT -p tcp --dport 22 -j DROP <enter>",
-      "curl -k http://{{ .HTTPIP }}:{{ .HTTPPort }}/cloud-config.yaml > cloud-config.yaml  <enter>",
-      "sudo coreos-install -d /dev/sda -C stable -c cloud-config.yaml <enter>",
-      "sudo reboot <enter>"
-    ]
+    "iso_checksum_type": "md5",
+    "ssh_username": "{{user `ssh_name`}}",
+    "ssh_password": "{{user `ssh_pass`}}",
+    "boot_wait":"4s",
+    "ssh_wait_timeout": "30s"
   }
   ],
-  "provisioners": [{
-    "type": "shell",
-    "inline": [
-      "docker pull dockito/proxy:latest",
-      "sudo mkdir -p /opt/bin",
-      "sudo curl -o /opt/bin/fig -L https://github.com/docker/fig/releases/download/1.0.1/fig-`uname -s`-`uname -m`",
-      "sudo chmod +x /opt/bin/fig",
-      "sudo curl -o /opt/bin/docker-compose -L https://github.com/docker/compose/releases/download/1.1.0/docker-compose-`uname -s`-`uname -m`",
-      "sudo chmod +x /opt/bin/docker-compose",
-      "sudo mkdir -p /etc/conf.d && sudo touch /etc/conf.d/nfs",
-      "sudo systemctl enable rpc-statd.service",
-      "sudo systemctl start rpc-statd.service",
-      "sudo fallocate -l 2048m /2GiB.swap",
-      "sudo chmod 600 /2GiB.swap",
-      "sudo chattr +C /2GiB.swap",
-      "sudo mkswap /2GiB.swap"
-    ]
-  }],
+  "provisioners": [
+    {
+      "type":"file",
+      "source":"cloud-config.yaml",
+      "destination":"/tmp/cloud_data.yml"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo rancheros-install -f -d /dev/sda -v v0.2.1 -t generic -c /tmp/cloud_data.yml"
+      ]
+    }
+  ],
   "post-processors": [
     [
       {
         "type": "vagrant",
         "output": "devbox_{{.Provider}}.box",
-        "vagrantfile_template": "vagrant/Vagrantfile",
-        "include": ["vagrant/configure_networks.rb"]
+        "vagrantfile_template": "vagrant/Vagrantfile"
       }
     ]
   ]

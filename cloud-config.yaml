@@ -29,7 +29,6 @@ write_files:
       c/JXrLo9orVW6co6aS+d1+xbztany4PgS+lyU7MTeysIkkFO0gA50UNJ2uOfaJlc
       oWnlH22zfWKjp3jPla8wL+MwF/98l5jtuDpLvM/h9xLBbQ==
       -----END CERTIFICATE-----
-
   - path: /data/dockito-proxy/certs/local.dockito.org.key
     permissions: 0644
     owner: root
@@ -61,74 +60,71 @@ write_files:
       Px359ZhCMNT0zTtCYFM+fOdu92eT3lSMHL3ARtW71UG1XXBd9l751lkB2wUQxUmw
       df3bQLz+Lrf10xuJVgcY/GdpWUAwuocU4dduB9LeSTuUHPUyOEh+
       -----END RSA PRIVATE KEY-----
+  # - path: /etc/resolv.conf
+  #   permissions: 0644
+  #   owner: root
+  #   content: |
+  #     nameserver 127.0.0.1
+  #     nameserver 8.8.8.8
+# users:
+#   - name: vagrant
+#     passwd: $6$rounds=4096$e/1eVLBLIyx4$rugS.gza5WFsEwxc9RQLa9mL0owrjJNpjG3bfYWBNTT55B8mPFagke.HX4YkS3oQSmD8/AyrcSD8XQMFcSf2P/
+#     groups:
+#       - sudo
+#       - docker
+#       - systemd-journal
+#     ssh-authorized-keys:
+#       - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key
 
-  - path: /etc/resolv.conf
-    permissions: 0644
-    owner: root
-    content: |
-      nameserver 127.0.0.1
-      nameserver 8.8.8.8
+# rancher:
+#   update:
+#     # we don't want our development box rebooting
+#     reboot-strategy: off
+#   etcd:
+#     name: devbox
+#   units:
+#     - name: etcd.service
+#       command: start
+#     - name: fleet.service
+#       command: start
 
-users:
-  - name: vagrant
-    passwd: $6$rounds=4096$e/1eVLBLIyx4$rugS.gza5WFsEwxc9RQLa9mL0owrjJNpjG3bfYWBNTT55B8mPFagke.HX4YkS3oQSmD8/AyrcSD8XQMFcSf2P/
-    groups:
-      - sudo
-      - docker
-      - systemd-journal
-    ssh-authorized-keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key
-
-coreos:
-  update:
-    # we don't want our development box rebooting
-    reboot-strategy: off
-  etcd:
-    name: devbox
-  units:
-    - name: etcd.service
-      command: start
-    - name: fleet.service
-      command: start
-
-    - name: dockito-proxy.service
-      command: start
-      enable: true
-      content: |
-        [Unit]
-        Description=Run dockito-proxy
-        After=docker.service
-        Requires=docker.service
-        [Service]
-        User=core
-        Restart=always
-        RestartSec=10s
-        ExecStartPre=/usr/bin/docker pull dockito/proxy:latest
-        ExecStartPre=-/usr/bin/docker rm -f dockito-proxy
-        ExecStart=/usr/bin/docker run --privileged=true --rm --name dockito-proxy -v /data/dockito-proxy/certs:/etc/nginx/certs -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 -p 443:443 dockito/proxy:latest
-        ExecStartPost=-/usr/bin/docker ps -a -q | xargs docker rm
-        ExecStop=/usr/bin/docker kill dockito-proxy
-        ExecStopPost=-/usr/bin/docker ps -a -q | xargs docker rm
-        [Install]
-        WantedBy=local.target
-
-    - name: dockito-dnsmasq.service
-      command: start
-      enable: true
-      content: |
-        [Unit]
-        Description=Run dockito-dnsmasq
-        After=docker.service
-        Requires=docker.service
-        [Service]
-        User=core
-        Restart=always
-        RestartSec=10s
-        ExecStartPre=/usr/bin/docker pull dockito/dnsmasq:latest
-        ExecStartPre=-/usr/bin/docker rm -f dockito-dnsmasq
-        ExecStart=/usr/bin/docker run --rm -p 53:53/udp -p 53:53/tcp --name dockito-dnsmasq dockito/dnsmasq:latest
-        ExecStartPost=-/usr/bin/docker ps -a -q | xargs docker rm
-        ExecStop=/usr/bin/docker kill dockito-dnsmasq
-        ExecStopPost=-/usr/bin/docker ps -a -q | xargs docker rm
-        [Install]
-        WantedBy=local.target
+#     - name: dockito-proxy.service
+#       command: start
+#       enable: true
+#       content: |
+#         [Unit]
+#         Description=Run dockito-proxy
+#         After=docker.service
+#         Requires=docker.service
+#         [Service]
+#         User=core
+#         Restart=always
+#         RestartSec=10s
+#         ExecStartPre=/usr/bin/docker pull dockito/proxy:latest
+#         ExecStartPre=-/usr/bin/docker rm -f dockito-proxy
+#         ExecStart=/usr/bin/docker run --privileged=true --rm --name dockito-proxy -v /data/dockito-proxy/certs:/etc/nginx/certs -v /var/run/docker.sock:/tmp/docker.sock -p 80:80 -p 443:443 dockito/proxy:latest
+#         ExecStartPost=-/usr/bin/docker ps -a -q | xargs docker rm
+#         ExecStop=/usr/bin/docker kill dockito-proxy
+#         ExecStopPost=-/usr/bin/docker ps -a -q | xargs docker rm
+#         [Install]
+#         WantedBy=local.target
+#     - name: dockito-dnsmasq.service
+#       command: start
+#       enable: true
+#       content: |
+#         [Unit]
+#         Description=Run dockito-dnsmasq
+#         After=docker.service
+#         Requires=docker.service
+#         [Service]
+#         User=core
+#         Restart=always
+#         RestartSec=10s
+#         ExecStartPre=/usr/bin/docker pull dockito/dnsmasq:latest
+#         ExecStartPre=-/usr/bin/docker rm -f dockito-dnsmasq
+#         ExecStart=/usr/bin/docker run --rm -p 53:53/udp -p 53:53/tcp --name dockito-dnsmasq dockito/dnsmasq:latest
+#         ExecStartPost=-/usr/bin/docker ps -a -q | xargs docker rm
+#         ExecStop=/usr/bin/docker kill dockito-dnsmasq
+#         ExecStopPost=-/usr/bin/docker ps -a -q | xargs docker rm
+#         [Install]
+#         WantedBy=local.target

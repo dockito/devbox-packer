@@ -1,11 +1,16 @@
 # -*- mode: ruby -*-
 # # vi: set ft=ruby :
 
-require_relative 'configure_networks.rb'
+
+unless Vagrant.has_plugin?("rancheros-guest")
+  raise 'rancheros-guest is not installed! run: vagrant plugin install rancheros-guest'
+end
 
 Vagrant.configure("2") do |config|
   VM_MEMORY = "1512"
   VM_IP = "10.10.10.10"
+
+  config.ssh.username = "rancher"
 
   config.vm.network :private_network, ip: VM_IP, netmask: "255.255.255.0"
 
