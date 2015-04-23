@@ -100,6 +100,7 @@ coreos:
         After=docker.service
         Requires=docker.service
         [Service]
+        KillMode=none
         User=core
         Restart=always
         RestartSec=10s
@@ -121,6 +122,7 @@ coreos:
         After=docker.service
         Requires=docker.service
         [Service]
+        KillMode=none
         User=core
         Restart=always
         RestartSec=10s
