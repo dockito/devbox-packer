@@ -78,3 +78,25 @@ coreos:
         ExecStopPost=-/usr/bin/docker ps -a -q | xargs docker rm
         [Install]
         WantedBy=local.target
+
+    - name: dockito-vault.service
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Run dockito-vault
+        After=docker.service
+        Requires=docker.service
+        [Service]
+        KillMode=none
+        User=core
+        Restart=always
+        RestartSec=10s
+        ExecStartPre=/usr/bin/docker pull dockito/vault:latest
+        ExecStartPre=-/usr/bin/docker rm -f dockito-vault
+        ExecStart=/usr/bin/docker run --rm -p 172.17.42.1:14242:3000 -v /vault:/vault --name dockito-vault dockito/vault:latest
+        ExecStartPost=-/usr/bin/docker ps -a -q | xargs docker rm
+        ExecStop=/usr/bin/docker kill dockito-vault
+        ExecStopPost=-/usr/bin/docker ps -a -q | xargs docker rm
+        [Install]
+        WantedBy=local.target
